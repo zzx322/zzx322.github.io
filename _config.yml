@@ -8,7 +8,7 @@
 
 # Basic Site Settings
 locale                   : "en-US"
-title                    : "zzx/Personal Homepage"
+title                    : "zzx's Personal Homepage"
 title_separator          : "-"
 name                     : &name "Zhixuan Zhao"
 description              : &description "a fourth year undergraduate student from Hainan University"
