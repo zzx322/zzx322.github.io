@@ -8,10 +8,10 @@
 
 # Basic Site Settings
 locale                   : "en-US"
-title                    : "zzx's personal homepage"
+title                    : "zzx/Personal Homepage"
 title_separator          : "-"
 name                     : &name "Zhixuan Zhao"
-description              : &description "personal description"
+description              : &description "a fourth year undergraduate student from Hainan University"
 url                      : https://academicpages.github.io # the base hostname & protocol for your site e.g. "https://mmistakes.github.io"
 baseurl                  : "" # the subpath of your site, e.g. "/blog"
 repository               : "zzx322/zzx322.github.io"
