@@ -14,4 +14,4 @@ I am very fortunate to be advised by [Prof. Xiaokang Wang](https://cs.hainanu.ed
 
 You can find my CV here: [Zhixuan Zhao's Curriculum Vitae](../assets/Curriculum_Vitae.pdf).
 
-[Email](mailto:20213006917@hainanu.edu.cn) / [Github](https://github.com/zzx322) / [Wechat](../images/wechat.jpg)
+[Email](mailto:20213006917@hainanu.edu.cn) / [Github](https://github.com/zzx322) / [Wechat](../images/wechat.jpg) / [QQ](../images/QQ.jpg)
