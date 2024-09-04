@@ -16,6 +16,9 @@ main:
 
   - title: "Daily"
     url: /Daily/
+
+  - title: "Anything"
+    url: /Anything/   
     
 #  - title: "Publications"
 #    url: /publications/
