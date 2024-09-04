@@ -10,7 +10,7 @@ redirect_from:
 
 I'm a fourth year undergraduate student from [School of CS](https://cs.hainanu.edu.cn/), [Hainan University](https://www.hainanu.edu.cn/). My research interest includes Tensor Analysis, machine learning, and Computer Vision.
 
-I am very fortunate to be advised by [Prof. xiaokang Wang](https://cs.hainanu.edu.cn/info/1104/2323.htm) from [School of Computer Science](https://cs.hainanu.edu.cn/), Hainan University.
+I am very fortunate to be advised by [Prof. Xiaokang Wang](https://cs.hainanu.edu.cn/info/1104/2323.htm) from [School of Computer Science](https://cs.hainanu.edu.cn/), Hainan University.
 
 You can find my CV here: [Zhixuan Zhao's Curriculum Vitae](../assets/Curriculum_Vitae.pdf).
 
