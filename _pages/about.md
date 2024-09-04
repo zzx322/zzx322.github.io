@@ -12,6 +12,6 @@ I'm a fourth year undergraduate student from [School of CS](https://cs.hainanu.e
 
 I am very fortunate to be advised by [Prof. xiaokang Wang](https://cs.hainanu.edu.cn/info/1104/2323.htm) from [School of Computer Science](https://cs.hainanu.edu.cn/), Hainan University.
 
-You can find my CV here: [zhixuan Zhao's Curriculum Vitae](../assets/Curriculum_Vitae.pdf).
+You can find my CV here: [Zhixuan Zhao's Curriculum Vitae](../assets/Curriculum_Vitae.pdf).
 
 [Email](mailto:20213006917@hainanu.edu.cn) / [Github](https://github.com/zzx322) / [Wechat](../images/wechat.jpg)
