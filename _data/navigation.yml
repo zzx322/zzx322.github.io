@@ -6,19 +6,19 @@
 
 main:
   - title: "Algorithm"
-    url: /Algorithm/
+    url: /algorithm/
 
   - title: "Research"
-    url: /Research/
+    url: /research/
 
   - title: "Project"
-    url: /Project/
+    url: /project/
     
   #- title: "Daily"
   #  url: /Daily/
 
   - title: "Anything"
-    url: /Anything/   
+    url: /anything/   
     
   - title: "Publications"
     url: /publications/
