@@ -8,14 +8,14 @@ main:
   - title: "Algorithm"
     url: /Algorithm/
 
-  - title: "Project"
-    url: /Project/
-
   - title: "Research"
     url: /Research/
 
-  - title: "Daily"
-    url: /Daily/
+  - title: "Project"
+    url: /Project/
+    
+  #- title: "Daily"
+  #  url: /Daily/
 
   - title: "Anything"
     url: /Anything/   
