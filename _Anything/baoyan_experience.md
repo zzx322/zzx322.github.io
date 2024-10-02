@@ -1,7 +1,7 @@
 ---
 title: '我的保研经验帖，上岸中山AI'
 date: 2024-10-2
-permalink: /Anything/baoyan experience/
+permalink: /Anything/baoyan_experience/
 ---
 
 # 2021级 末二 计算机 保研经验贴（最终去向：中山AI）
