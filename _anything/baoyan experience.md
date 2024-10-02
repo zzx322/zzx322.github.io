@@ -2,8 +2,6 @@
 title: '2021级 末二 计算机 保研经验贴（上岸中山AI）'
 date: 2024-10-2
 permalink: /Anything/baoyan_experience/
-tags:
-  - 保研
 ---
 
 摘要：谨以此文记录我的保研历程，同时为后面的同学分享自己的一点点经验
