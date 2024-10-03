@@ -113,4 +113,4 @@ permalink: /Anything/baoyan_experience/
 
 &emsp;&emsp;感谢大学期间帮助、陪伴我的同学、老师和朋友。
 
-&emsp;&emsp;也同样感谢您的阅读，祝您保研顺利，上岸梦校！
+&emsp;&emsp;也同样感谢你的阅读，祝你保研顺利，上岸梦校！
