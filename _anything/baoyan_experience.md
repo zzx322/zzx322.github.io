@@ -1,6 +1,6 @@
 ---
 title: '2021级 末二 计算机 保研经验贴（上岸中山AI）'
-date: 2024-10-2
+date: 2024-10-02
 permalink: /anything/baoyan_experience/
 ---
 
