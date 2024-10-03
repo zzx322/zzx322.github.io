@@ -224,6 +224,9 @@ collections:
   anything:
     output: true
     permalink: /:collection/:path/    
+  project:
+    output: true
+    permalink: /:collection/:path/    
 
 
 # These settings control how pages and collections are included in the site
@@ -285,6 +288,14 @@ defaults:
   - scope:
       path: ""
       type: anything
+    values:
+      layout: single
+      author_profile: true
+      share: true     
+  # _project
+  - scope:
+      path: ""
+      type: project
     values:
       layout: single
       author_profile: true
