@@ -2,7 +2,7 @@
 title: "初试HarmonyOS - 实现一个简单的APP"
 collection: project
 type: "Project"
-permalink: /project/haemonyos1
+permalink: /project/harmonyos-1
 date: 2024-10-04
 ---
 
