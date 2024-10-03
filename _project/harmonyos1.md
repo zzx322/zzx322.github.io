@@ -1,11 +1,9 @@
 ---
-title: "Talk 1 on Relevant Topic in Your Field"
-collection: talks
-type: "Talk"
-permalink: /talks/2012-03-01-talk-1
-venue: "UC San Francisco, Department of Testing"
-date: 2012-03-01
-location: "San Francisco, California"
+title: "初试HarmonyOS - 实现一个简单的APP"
+collection: project
+type: "Project"
+permalink: /project/haemonyos1
+date: 2024-10-04
 ---
 
-This is a description of your talk, which is a markdown files that can be all markdown-ified like any other post. Yay markdown!
+基于HarmonyOS，我实现了一个简单的APP进行数据展示
