@@ -22,13 +22,13 @@ date: 2024-10-04
 
 &emsp;&emsp;在具体的实现中，我使用6个Page和一个常量类实现主要功能。
 
-&emsp;&emsp;* Constant.ets - 存放一些常量，例如一些文字大小，颜色等等
-&emsp;&emsp;* Index.ets - 初始化界面，进行一些数据的加载
-&emsp;&emsp;* Login.ets - 登陆界面，进行用户登陆和身份验证操作
-&emsp;&emsp;* Register.ets - 注册界面，首次使用用户注册
-&emsp;&emsp;* Load.ets - 加载界面，用于轴承数据的加载
-&emsp;&emsp;* Table.ets - 主页，对轴承数据进行归档展示
-&emsp;&emsp;* Detail.ets - 详情界面，对每个轴承的详细信息和检测结果进行展示
+* Constant.ets - 存放一些常量，例如一些文字大小，颜色等等
+* Index.ets - 初始化界面，进行一些数据的加载
+* Login.ets - 登陆界面，进行用户登陆和身份验证操作
+* Register.ets - 注册界面，首次使用用户注册
+* Load.ets - 加载界面，用于轴承数据的加载
+* Table.ets - 主页，对轴承数据进行归档展示
+* Detail.ets - 详情界面，对每个轴承的详细信息和检测结果进行展示
 
 # 代码介绍
 
