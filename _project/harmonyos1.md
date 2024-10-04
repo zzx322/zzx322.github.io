@@ -9,24 +9,26 @@ date: 2024-10-04
 摘要：基于HarmonyOS的ArkTS框架，我实现了一个简单的APP进行数据获取和展示
 
 # 环境介绍
-HarmonyOS是华为开发的操作系统，目前已经更新到了HarmonyOS NEXT——也就是常说的纯血鸿蒙，有广阔的发展前景。
+&emsp;&emsp;HarmonyOS是华为开发的操作系统，目前已经更新到了HarmonyOS NEXT——也就是常说的纯血鸿蒙，有广阔的发展前景。
 
-我们团队中的项目需要开发一个移动端的APP进行数据展示，本着追逐风口和支持国产的想法，我们选择基于HarmonyOS进行APP的开发。这是我第一次进行APP开发，当时的HarmonyOS还是支持JAVA和ArkTS两种语言进行开发，因为官方在ArkTS方面有相关说明，所以我选用ArkTS进行开发。
+&emsp;&emsp;我们团队中的项目需要开发一个移动端的APP进行数据展示，本着追逐风口和支持国产的想法，我们选择基于HarmonyOS进行APP的开发。
 
-我们使用华为的DevEco Studio作为IDE，选用的SDK版本为3.1.0(API 9)
+&emsp;&emsp;这是我第一次进行APP开发，当时的HarmonyOS还是支持JAVA和ArkTS两种语言进行开发，因为官方在ArkTS方面有相关说明，所以我选用ArkTS语言进行开发，而基于ArkTS的声明式UI也是比较简单，容易上手。
+
+&emsp;&emsp;我们使用华为的DevEco Studio作为IDE，选用的SDK版本为3.1.0(API 9)
 
 # 产品说明
-我们的项目是对轴承进行故障检测和寿命预测，并将检测和预测的结果存储在服务器中，由移动端进行数据的获取和展示。因此，APP的主要需求就是从网络中获取数据和恰当的数据展示。
+&emsp;&emsp;我们的项目是对轴承进行故障检测和寿命预测，并将检测和预测的结果存储在服务器中，由移动端进行数据的获取和展示。因此，APP的主要需求就是从网络中获取数据和恰当的数据展示。
 
-在具体的实现中，我使用6个Page和一个常量类实现主要功能。
+&emsp;&emsp;在具体的实现中，我使用6个Page和一个常量类实现主要功能。
 
-* Constant.ets - 存放一些常量，例如一些文字大小，颜色等等
-* Index.ets - 初始化界面，进行一些数据的加载
-* Login.ets - 登陆界面，进行用户登陆和身份验证操作
-* Register.ets - 注册界面，首次使用用户注册
-* Load.ets - 加载界面，用于轴承数据的加载
-* Table.ets - 主页，对轴承数据进行归档展示
-* Detail.ets - 详情界面，对每个轴承的详细信息和检测结果进行展示
+&emsp;&emsp;* Constant.ets - 存放一些常量，例如一些文字大小，颜色等等
+&emsp;&emsp;* Index.ets - 初始化界面，进行一些数据的加载
+&emsp;&emsp;* Login.ets - 登陆界面，进行用户登陆和身份验证操作
+&emsp;&emsp;* Register.ets - 注册界面，首次使用用户注册
+&emsp;&emsp;* Load.ets - 加载界面，用于轴承数据的加载
+&emsp;&emsp;* Table.ets - 主页，对轴承数据进行归档展示
+&emsp;&emsp;* Detail.ets - 详情界面，对每个轴承的详细信息和检测结果进行展示
 
 # 代码介绍
 
@@ -127,7 +129,7 @@ struct Index {
   }
 }
 ```
-因为我们不会再回到初始界面，所以我们选用router.replaceUrl进行跳转
+&emsp;&emsp;因为我们不会再回到初始界面，所以我们选用router.replaceUrl进行跳转
 
 ## Login
 ```typescript
@@ -242,9 +244,9 @@ struct login{
   }
 }
 ```
-这里我们使用httpRequest从服务器获取数据，并与输入的密码对比验证。
+&emsp;&emsp;这里我们使用httpRequest从服务器获取数据，并与输入的密码对比验证。
 
-同时，我们使用AlertDialog.show作提示弹窗。
+&emsp;&emsp;同时，我们使用AlertDialog.show作提示弹窗。
 
 ## Register
 ```typescript
@@ -350,7 +352,7 @@ struct Register {
   }
 }
 ```
-这里要注意，当我们传送的extraData数量为两个及以上时，需要使用“+”将其连接起来，而非官方文档中的";"(可能官方文档还没来得及更改)
+&emsp;&emsp;这里要注意，当我们传送的extraData数量为两个及以上时，需要使用“+”将其连接起来，而非官方文档中的";"(可能官方文档还没来得及更改)
 ```typescript
 extraData:'name='+String(this.username)+'&pwd='+String(this.password)
 ```
@@ -559,7 +561,7 @@ struct Load {
   }
 }
 ```
-这里我专门设计一个界面进行数据加载，主要是方便进行刷新等操作。
+&emsp;&emsp;这里我专门设计一个界面进行数据加载，主要是方便进行刷新等操作。
 
 ## Table
 ```typescript
@@ -770,7 +772,7 @@ struct Table{
   }
 }
 ```
-这里我们主要通过一个二级列表，实现对轴承和机器的归纳管理。
+&emsp;&emsp;这里我们主要通过一个二级列表，实现对轴承和机器的归纳管理。
 
 ## Detail
 ```typescript
@@ -1258,4 +1260,7 @@ struct detail{
   }
 }
 ```
-我们通过状态变量isExpanded，isDet来实现不同功能的切换。
+&emsp;&emsp;我们通过状态变量isExpanded，isDet来实现不同功能的切换。
+
+
+&emsp;&emsp;综上，我们就实现了一个比较简单的Harmony APP。
