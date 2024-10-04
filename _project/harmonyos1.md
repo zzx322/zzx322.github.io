@@ -559,7 +559,7 @@ struct Load {
   }
 }
 ```
-这里我专门设计一个界面进行数据加载，主要是方便进行刷新等操作
+这里我专门设计一个界面进行数据加载，主要是方便进行刷新等操作。
 
 ## Table
 ```typescript
@@ -567,7 +567,6 @@ import { dataList, mbNum,pre } from './load'
 import Constant from '../common/Constant'
 import router from '@ohos.router';
 
-//let ipAddress=router.getParams()['ipAddress']
 let zero:number[] = new Array(100).fill(0);
 @Entry
 @Component
@@ -614,48 +613,12 @@ struct Table{
         this.bearNumber.push('machine_'+(i+1).toString()+"_bearing_"+(j+1).toString())
       }
     }
-
-    // for(let i=0;i<this.record.length;i++){
-    //   console.log('record '+i+' : '+this.record[i])
-    // }
-    // for(let i=0;i<this.machineNumber.length;i++){
-    //   console.log('machineNumber '+i+' : '+this.machineNumber[i])
-    // }
-    // for(let i=0;i<this.bearNumber.length;i++){
-    //   console.log('bearNumber '+i+' : '+this.bearNumber[i])
-    // }
-
-    //this.data_list== JSON.parse(JSON.stringify(dataList))
-    // for(let a=0;a<this.data_list.length;a++){
-    //   if(this.data_list[a]==null)
-    //     continue;
-    //   for(let b=0;b<this.data_list[a].length;b++){
-    //     if(this.data_list[a][b]==null)
-    //       continue;
-    //     for(let c=0;c<this.data_list[a][b].length;c++){
-    //       if(this.data_list[a][b][c]==null)
-    //         continue
-    //       for(let d=0;d<this.data_list[a][b][c].length;d++)
-    //         console.log("data"+"机器"+a+"轴承"+b+"第"+c+"次"+"的属性"+d+":"+this.data_list[a][b][c][d])
-    //     }
-    //   }
-    // }
-
   }
 
   build(){
     Column(){
       Blank().height("2%").width('100%').backgroundColor('#ffffff')
       Row(){
-        // Image($r('app.media.tian_b'))
-        //   .interpolation(ImageInterpolation.High)
-        //   .margin({left:15})
-        //   .height("90%")
-        //
-        // Image($r('app.media.qiong_b'))
-        //   .interpolation(ImageInterpolation.High)
-        //   .height("90%")
-        //   .margin({left:5})
 
         Text('ArgBearing').fontColor(Constant.LOGIN_COLOR).fontSize(30).fontWeight(FontWeight.Bold).margin({left:15}).fontStyle(FontStyle.Italic)
 
@@ -762,15 +725,6 @@ struct Table{
 
                     Text('剩余寿命(RUL)：'+this.preData[this.findClassIndex(index)][index-this.record[this.findClassIndex(index)]][this.preData[this.findClassIndex(index)][index-this.record[this.findClassIndex(index)]].length-1][3].substring(0,5)+" 天").height("30%").fontSize(20)
 
-                      // if (this.data[this.findClassIndex(index)][index-this.record[this.findClassIndex(index)]][this.data[this.findClassIndex(index)][index-this.record[this.findClassIndex(index)]].length-1][3] == "0") {
-                      //   Text('健康').height("30%").fontSize(20)
-                      // }
-                      // else if (this.data[this.findClassIndex(index)][index-this.record[this.findClassIndex(index)]][this.data[this.findClassIndex(index)][index-this.record[this.findClassIndex(index)]].length-1][3] == "3") {
-                      //   Text('危险').height("30%").fontSize(20)
-                      // }
-                      // else {
-                      //   Text('异常').height("30%").fontSize(20)
-                      // }
                   }.alignItems(HorizontalAlign.Start)
                   .justifyContent(FlexAlign.SpaceEvenly)
                   .height('100%').margin({left:20})
@@ -817,3 +771,491 @@ struct Table{
 }
 ```
 这里我们主要通过一个二级列表，实现对轴承和机器的归纳管理。
+
+## Detail
+```typescript
+import Constant from '../common/Constant'
+import router from '@ohos.router'
+import { dataList, mbNum,pre } from './load'
+import http from '@ohos.net.http';
+// import {PullToRefresh} from '@ohos/pulltorefresh'
+
+let machineN=router.getParams()['machine']
+let bearN = router.getParams()['bear']
+//let ipAddress = router.getParams()['ipAddress']
+
+@Entry
+@Component
+struct detail{
+
+  @State data:string[][][][]=dataList
+  @State mb:number[]=mbNum;
+  @State pre:string[][][][]=pre
+  b_index:number[]=[]
+  p_index:number[]=[]
+  dataNew:string[]=[]
+
+  private scroller:Scroller=new Scroller()
+
+  @State isExpanded: boolean = false;
+  @State isDet:boolean=true;
+  @State isRefreshing:boolean=false;
+
+  aboutToAppear(){
+    let j=0
+    for(let i=this.data[machineN][bearN].length-1;i>=0;i--){
+      this.b_index[j]=i
+      j++
+    }
+
+    let k=0
+    for(let i=this.pre[machineN][bearN].length-1;i>=0;i--){
+      this.p_index[k]=i
+      k++
+    }
+
+  }
+
+  private getLoc(a:number):string{
+    if(a==0) return "滚珠"
+    else if(a==1) return "内圈"
+    else if(a==2) return "外圈3点钟"
+    else return "外圈6点钟"
+  }
+
+  openDialog(text: string[]) {
+  AlertDialog.show(
+    {
+      //title: 'title',
+      message: text[0]+"\n"+text[1],
+      autoCancel: true,
+      alignment: DialogAlignment.Bottom,
+      offset: { dx: 0, dy: -20 },
+    }
+  )
+}
+  build(){
+    Column() {
+      Blank().height("2%").width('100%').backgroundColor('#ffffff')
+      Row() {
+        Image($r('app.media.ic_public_left_filled'))
+          .interpolation(ImageInterpolation.High)
+          .height("60%")
+          .margin({ left: 15 })
+          .backgroundColor(Color.White)
+          .onClick(() => {
+            router.replaceUrl({
+              url: 'pages/Table',
+              params: {
+                //ipAddress: ipAddress
+              }
+            }, router.RouterMode.Single)
+          })
+        Text('Machine ' + (Number(machineN) + 1).toString() + ' ' + 'bearing ' + (Number(bearN) + 1))
+          .fontColor(Constant.LOGIN_COLOR)
+          .fontWeight(FontWeight.Bold)
+          .fontSize(20)
+          .width("50%")
+          .padding(10)
+        Image($r('app.media.ic_public_refresh'))
+          .interpolation(ImageInterpolation.High)
+          .height("50%")
+          .backgroundColor(Color.White)
+          .margin({ left: 240 })
+          .onClick(() => {
+            router.replaceUrl({
+              url: 'pages/load',
+              params: {
+                f: 1,
+                mn: machineN,
+                bn: bearN,
+                //ipAddress: ipAddress
+              }
+            }, router.RouterMode.Single)
+          })
+        Image($r('app.media.ic_public_more_filled'))
+          .interpolation(ImageInterpolation.High)
+          .height("60%")
+          .backgroundColor(Color.White)
+          .margin({ left: 20 })
+          .onClick(() => {
+            router.pushUrl({
+              url: 'pages/explain',
+              params: {}
+            }, router.RouterMode.Single)
+          })
+      }.width('100%')
+      .backgroundColor(Color.White).height("5%")
+
+      if (this.data[machineN][bearN][this.data[machineN][bearN].length-1][3] === "0") {
+        Image($r('app.media.bearing_5')).height("33%")
+      }
+      else {
+        if (this.data[machineN][bearN][0][4] === "0")
+          Image($r('app.media.bearing_0')).height("33%")
+        else if (this.data[machineN][bearN][0][4] === "1")
+          Image($r('app.media.bearing_1')).height("33%")
+        else if (this.data[machineN][bearN][0][4] === "2")
+          Image($r('app.media.bearing_2')).height("33%")
+        else
+          Image($r('app.media.bearing_3')).height("33%")
+      }
+
+      Row(){
+        Button('故障检测', { type: ButtonType.Normal, stateEffect: false })
+          .width('50%')
+          .height("100%")
+          .fontSize(16)
+          .fontWeight(FontWeight.Medium)
+          .backgroundColor(this.isDet?'#0166e6':'#0171FF')
+          .onClick(()=>{
+            this.isDet=true
+          })
+        Button('寿命预测', { type: ButtonType.Normal, stateEffect: false })
+          .width('50%')
+          .height("100%")
+          .fontSize(16)
+          .fontWeight(FontWeight.Medium)
+          .backgroundColor(this.isDet?'#0171FF':'#0166e6')
+          .onClick(()=>{
+            this.isDet=false
+          })
+      }.height("5%")
+
+      if(this.isDet) {
+
+        List({ space: 10 }) {
+          ForEach(this.b_index, (item: number, index: number) => {
+            ListItem() {
+              Column() {
+                Row() {
+                  if (this.data[machineN][bearN][item][3] === "0") {
+                    Image($r('app.media.bear_g'))
+                      .aspectRatio(1)
+                      .objectFit(ImageFit.Contain)
+                      .height(80)
+                      .backgroundColor(Color.White)
+                      .align(Alignment.Center)
+                      .width('25%')
+                      .margin({ left: 60 })
+                  }
+                  else if (this.data[machineN][bearN][item][3] === "3") {
+                    Image($r('app.media.bear_r'))
+                      .aspectRatio(1)
+                      .objectFit(ImageFit.Contain)
+                      .height(80)
+                      .backgroundColor(Color.White)
+                      .align(Alignment.Center)
+                      .width('25%')
+                      .margin({ left: 60 })
+                  }
+                  else {
+                    Image($r('app.media.bear_y'))
+                      .aspectRatio(1)
+                      .objectFit(ImageFit.Contain)
+                      .height(80)
+                      .backgroundColor(Color.White)
+                      .align(Alignment.Center)
+                      .width('25%')
+                      .margin({ left: 60 })
+                  }
+                  Column() {
+                    Text('detectSN: ' + this.data[machineN][bearN][item][0])
+                      .textAlign(TextAlign.Start)
+                      .width('100%')
+                      .height(40)
+                      .fontSize(20)
+                    Text('detectTime:' + this.data[machineN][bearN][item][12])
+                      .textAlign(TextAlign.Start)
+                      .width('100%')
+                      .height(40)
+                      .fontSize(20)
+                  }.width('70%').margin({ left: 50 })
+                }.width('100%').height(80)
+
+                if (this.isExpanded) {
+                  Row() {
+                    Column() {
+                      if (this.data[machineN][bearN][item][3] === "0") {
+                        Image($r('app.media.bearing_5')).height(120).margin({ left: 20 })
+                      }
+                      else {
+                        if (this.data[machineN][bearN][item][4] === "0")
+                          Image($r('app.media.bearing_0')).height(120).margin({ left: 20 })
+                        else if (this.data[machineN][bearN][item][4] === "1")
+                          Image($r('app.media.bearing_1')).height(120).margin({ left: 20 })
+                        else if (this.data[machineN][bearN][item][4] === "2")
+                          Image($r('app.media.bearing_2')).height(120).margin({ left: 20 })
+                        else
+                          Image($r('app.media.bearing_3')).height(120).margin({ left: 20 })
+                      }
+                    }
+
+                    Column() { //文本
+                      Row() {
+                        Text('loc1: ' + this.getLoc(Number(this.data[machineN][bearN][item][4])))
+                          .width('25%')
+                          .textAlign(TextAlign.Start)
+                          .height(40)
+                          .fontSize(20)
+
+                        Text('Dia1: ' + Number(this.data[machineN][bearN][item][3]) * 7 + " mils")
+                          .width('24%')
+                          .textAlign(TextAlign.Start)
+                          .height(40)
+                          .fontSize(20)
+
+                        Text('Score1: ' + this.data[machineN][bearN][item][5].substring(0, 6))
+                          .width('40%')
+                          .textAlign(TextAlign.Start)
+                          .height(40)
+                          .fontSize(20)
+                        Blank().width('10%')
+                      }.width('100%').height(40)
+
+                      Row() {
+                        Text('loc2: ' + this.getLoc(Number(this.data[machineN][bearN][item][7])))
+                          .width('25%')
+                          .textAlign(TextAlign.Start)
+                          .height(40)
+                          .fontSize(20)
+
+                        Text('Dia2: ' + Number(this.data[machineN][bearN][item][6]) * 7 + " mils")
+                          .width('24%')
+                          .textAlign(TextAlign.Start)
+                          .height(40)
+                          .fontSize(20)
+
+                        Text('Score2: ' + this.data[machineN][bearN][item][8].substring(0, 6))
+                          .width('40%')
+                          .textAlign(TextAlign.Start)
+                          .height(40)
+                          .fontSize(20)
+                        Blank().width('10%')
+                      }.width('100%').height(40)
+
+                      Row() {
+                        Text('loc3: ' + this.getLoc(Number(this.data[machineN][bearN][item][10])))
+                          .width('25%')
+                          .textAlign(TextAlign.Start)
+                          .height(40)
+                          .fontSize(20)
+
+                        Text('Dia3: ' + Number(this.data[machineN][bearN][item][9]) * 7 + " mils")
+                          .width('24%')
+                          .textAlign(TextAlign.Start)
+                          .height(40)
+                          .fontSize(20)
+
+                        Text('Score3: ' + this.data[machineN][bearN][item][11].substring(0, 6))
+                          .width('40%')
+                          .textAlign(TextAlign.Start)
+                          .height(40)
+                          .fontSize(20)
+                        Blank().width('10%')
+                      }.width('100%').height(40)
+                    }.margin({ left: 5 })
+                  }
+                }
+              }
+              .width('100%')
+              .height(this.isExpanded ? 200 : 80)
+              .onClick(() => {
+                this.isExpanded = !this.isExpanded;
+              })
+              .borderRadius(20)
+              .backgroundColor(Color.White)
+            }
+          }, item => item)
+
+
+        }.height("50%")
+
+        Column() {
+          Blank().height("10%")
+          Button('立 即 检 测', { type: ButtonType.Capsule, stateEffect: true })
+            .width('90%')
+            .height("80%")
+            .fontSize(16)
+            .fontWeight(FontWeight.Medium)
+            .backgroundColor('#007DFF')
+            .onClick(() => {
+              let httpRequest7 = http.createHttp();
+              let url7 = Constant.API7;
+              let promise7 = httpRequest7.request(
+                url7,
+                {
+                  method: http.RequestMethod.POST,
+                  extraData:'machine_id='+Number(machineN+1)+'&bearing_id='+Number(bearN+1),
+                  connectTimeout: 60000,
+                  readTimeout: 60000,
+                  header: {
+                    "Content-Type": "application/x-www-form-urlencoded"
+                  }
+                });
+              promise7.then((data) => {
+                if (data.responseCode === http.ResponseCode.OK) {
+                  let dataGet=JSON.parse(JSON.parse(JSON.stringify(data.result)))
+                  this.dataNew[0]="Machine_ID: "+JSON.parse(JSON.stringify(dataGet["machine_id"]))
+                  this.dataNew[1]="Bearing_ID: "+JSON.parse(JSON.stringify(dataGet["bearing_id"]))
+                  this.dataNew[2]="Loc1: "+this.getLoc(Number(JSON.stringify(dataGet["faultLoc1"])))
+                  this.dataNew[3]="Dia1: "+Number(JSON.stringify(dataGet["faultDia1"]))*7+" mils"
+                  this.dataNew[4]="Score1: "+JSON.stringify(dataGet["faultScore1"]).substring(0,6)
+                  this.dataNew[5]="Loc2: "+this.getLoc(Number(JSON.stringify(dataGet["faultLoc2"])))
+                  this.dataNew[6]="Dia2: "+Number(JSON.stringify(dataGet["faultDia2"]))*7+" mils"
+                  this.dataNew[7]="Score2: "+JSON.stringify(dataGet["faultScore2"]).substring(0,6)
+                  this.dataNew[8]="Loc3: "+this.getLoc(Number(JSON.stringify(dataGet["faultLoc3"])))
+                  this.dataNew[9]="Dia3: "+Number(JSON.stringify(dataGet["faultDia3"]))*7+" mils"
+                  this.dataNew[10]="Score3: "+JSON.stringify(dataGet["faultScore3"]).substring(0,6)
+
+                  console.info('Result:' + data.result);
+                  console.info('code:' + data.responseCode);
+                  AlertDialog.show(
+                    {
+                      title: '检测结果', // 标题
+                      message: this.dataNew[0]+"\n"+this.dataNew[1]+"\n"+this.dataNew[2]+"\n"+this.dataNew[3]+"\n"+this.dataNew[4]+"\n"+this.dataNew[5]+"\n"+this.dataNew[6]+"\n"+this.dataNew[7]+"\n"+this.dataNew[8]+"\n"+this.dataNew[9]+"\n"+this.dataNew[10], // 内容
+                      autoCancel: false, // 点击遮障层时，是否关闭弹窗。
+                      alignment: DialogAlignment.Center, // 弹窗在竖直方向的对齐方式
+                      offset: { dx: 0, dy: -20 }, // 弹窗相对alignment位置的偏移量
+                      // gridCount:5 ,
+                      primaryButton: {
+                        value: '确定',
+                        action: () => {
+                          console.info('Callback when the first button is clicked');
+                          router.replaceUrl({
+                            url: 'pages/load',
+                            params: {
+                              f: 1,
+                              mn: machineN,
+                              bn: bearN,
+                              //ipAddress: ipAddress
+                            }
+                          }, router.RouterMode.Single)
+                        }
+                      },
+                      cancel: () => { // 点击遮障层关闭dialog时的回调
+                        console.info('Closed callbacks');
+                      }
+                    }
+                  )
+                }
+              }).catch((err) => {
+                console.info('error:' + JSON.stringify(err));
+              });
+            })
+          Blank().height("10%")
+        }.height("5%").width("100%")
+
+      }
+      else{
+
+        List({ space: 10 }) {
+          ForEach(this.p_index, (item: number, index: number) => {
+            ListItem() {
+              Column() {
+                Text('predictSN: ' + this.pre[machineN][bearN][item][0])
+                  .width('100%')
+                  .textAlign(TextAlign.Start)
+                  .height(40)
+                  .fontSize(20)
+                  .margin({left:50})
+                Text('剩余寿命(RUL): ' + this.pre[machineN][bearN][item][3].substring(0,5)+" 天")
+                  .width('100%')
+                  .textAlign(TextAlign.Start)
+                  .height(40)
+                  .fontSize(20)
+                  .margin({left:50})
+                Text('predictTime: ' + this.pre[machineN][bearN][item][4])
+                  .width('100%')
+                  .textAlign(TextAlign.Start)
+                  .height(40)
+                  .fontSize(20)
+                  .margin({left:50})
+              }
+              .width('100%')
+              .height(120)
+              .borderRadius(20)
+              .backgroundColor(Color.White)
+            }
+          }, item => item)
+        }.height("50%")
+
+        Column() {
+          Blank().height("10%")
+          Button('立 即 预 测', { type: ButtonType.Capsule, stateEffect: true })
+            .width('90%')
+            .height("80%")
+            .fontSize(16)
+            .fontWeight(FontWeight.Medium)
+            .backgroundColor('#007DFF')
+            .onClick(() => {
+              let httpRequest8 = http.createHttp();
+              let url8 = Constant.API8;
+              let promise8 = httpRequest8.request(
+                url8,
+                {
+                  method: http.RequestMethod.POST,
+                  extraData:'machine_id='+Number(machineN+1)+'&bearing_id='+Number(bearN+1),
+                  connectTimeout: 60000,
+                  readTimeout: 60000,
+                  header: {
+                    "Content-Type": "application/x-www-form-urlencoded"
+                  }
+                });
+              promise8.then((data) => {
+                if (data.responseCode === http.ResponseCode.OK) {
+                  let dataGet=JSON.parse(JSON.parse(JSON.stringify(data.result)))
+                  this.dataNew[0]="Machine_ID: "+JSON.parse(JSON.stringify(dataGet["machine_id"]))
+                  this.dataNew[1]="Bearing_ID: "+JSON.parse(JSON.stringify(dataGet["bearing_id"]))
+                  this.dataNew[2]="剩余寿命(RUL): "+JSON.stringify(dataGet["rul"]).substring(0,5)+" 天"
+
+                  console.info('Result:' + data.result);
+                  console.info('code:' + data.responseCode);
+
+                  AlertDialog.show(
+                    {
+                      title: '预测结果', // 标题
+                      message: this.dataNew[0]+"\n"+this.dataNew[1]+"\n"+this.dataNew[2], // 内容
+                      autoCancel: false, // 点击遮障层时，是否关闭弹窗。
+                      alignment: DialogAlignment.Center, // 弹窗在竖直方向的对齐方式
+                      offset: { dx: 0, dy: -20 }, // 弹窗相对alignment位置的偏移量
+                      primaryButton: {
+                        value: '确定',
+                        action: () => {
+                          console.info('Callback when the first button is clicked');
+                          router.replaceUrl({
+                            url: 'pages/load',
+                            params: {
+                              f: 1,
+                              mn: machineN,
+                              bn: bearN,
+                              //ipAddress: ipAddress
+                            }
+                          }, router.RouterMode.Single)
+                        }
+                      },
+                      cancel: () => { // 点击遮障层关闭dialog时的回调
+                        console.info('Closed callbacks');
+                      }
+                    }
+                  )
+                }
+              }).catch((err) => {
+                console.info('error:' + JSON.stringify(err));
+              });
+            })
+          Blank().height("10%")
+        }.height("5%").width("100%")
+      }
+      // .divider({
+      //   strokeWidth: 1,
+      //   startMargin: 60,
+      //   endMargin: 10,
+      //   color: Constant.LOGIN_COLOR
+      // })
+    }
+    .backgroundColor('#f8f8f8')
+  }
+}
+```
+我们通过状态变量isExpanded，isDet来实现不同功能的切换。
